@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import HomeAdmin from '../../../adminhome/adapters/screens/HomeAdmin'
 import { Header, getHeaderTitle } from '@react-navigation/elements';
 import { Icon } from '@rneui/base';
+import Login from '../../../auth/adapters/screens/Login';
 const Stack = createStackNavigator();
 
 export default function HomeStack() {
@@ -16,16 +17,27 @@ export default function HomeStack() {
             }}
         >
             <Stack.Screen
-                name="HomeAdmin"
-                component={HomeAdmin}
+                name="LoginScreen"
+                component={Login}
                 options={{headerLeft: () => (
-                    <Icon name="account-circle" type='material-community' color={'#13505B'} size={44}/>
+                    <Icon name="account-circle" type='material-community' color={'#13505B'} size={44} />
                 ),
-                    headerTitle:'SIGEU - Administrador', headerTintColor:'#13505B'
-            }}
+                headerTitle: 'SIGEU - LOGIN', headerTintColor: '#13505B'}}
             />
+        
         </Stack.Navigator>
     )
 }
-
+/**
+ *            <Stack.Screen
+                name="HomeAdmin"
+                component={HomeAdmin}
+                options={{
+                    headerLeft: () => (
+                        <Icon name="account-circle" type='material-community' color={'#13505B'} size={44} />
+                    ),
+                    headerTitle: 'SIGEU - Administrador', headerTintColor: '#13505B'
+                }}
+            />
+ */
 const styles = StyleSheet.create({})
