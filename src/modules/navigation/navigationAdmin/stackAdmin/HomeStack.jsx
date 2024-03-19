@@ -17,19 +17,6 @@ export default function HomeStack() {
             }}
         >
             <Stack.Screen
-                name="LoginScreen"
-                component={Login}
-                options={{headerLeft: () => (
-                    <Icon name="account-circle" type='material-community' color={'#13505B'} size={44} />
-                ),
-                headerTitle: 'SIGEU - LOGIN', headerTintColor: '#13505B'}}
-            />
-        
-        </Stack.Navigator>
-    )
-}
-/**
- *            <Stack.Screen
                 name="HomeAdmin"
                 component={HomeAdmin}
                 options={{
@@ -39,5 +26,10 @@ export default function HomeStack() {
                     headerTitle: 'SIGEU - Administrador', headerTintColor: '#13505B'
                 }}
             />
+        </Stack.Navigator>
+    )
+}
+/**
+
  */
 const styles = StyleSheet.create({})

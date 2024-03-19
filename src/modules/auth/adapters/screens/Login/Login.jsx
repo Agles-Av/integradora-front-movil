@@ -2,15 +2,22 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { Image, Input, Button, Icon } from '@rneui/base'
 import { isEmpty } from 'lodash';
-import Loading from '../../../../kernel/components/Loading';
-import Axios from "axios";
+import Loading from '../../../../../kernel/components/Loading';
+import { LoginStyles } from './constants/Index';
+//import { useNavigation } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Login() {
+
+
+export default function Login(props) {
+  const {setReload} = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const [showMessage, setShowMessage] = useState("");
   const [visible, setVisible] = useState(false);
+  //const navigation = useNavigation();
 
   const sigin = { email, password };
   const login = async () => {
@@ -18,8 +25,8 @@ export default function Login() {
       //proceso de inicio de sesión
       setShowMessage('');
       setVisible(true);
-      try {
-        fetch('http://192.168.1.69:8080/api/auth/signin', {
+      try { 
+        fetch('http://192.168.109.88:8080/api/auth/signin', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -28,12 +35,20 @@ export default function Login() {
         })
           .then(response => response.json())
           .then(data => {
-            console.log('POST Request Result:', data);
+            console.log('POST Request Result:', data.data.roles.name);
+            setVisible(false);
+          
+            if (data.data.roles.name === 'ADMIN_ROLE') {
+              console.log("entre");
+              AsyncStorage.setItem('role', data.data.roles.name);
+              //navigation.dispatch("HomeAdmin");
+            }else if (data.data.roles.name=== 'ESTUDIANTE_ROLE') {
+              AsyncStorage.setItem('role', data.data.roles.name);
+             //navigation.dispatch("HomeEstudiante");
+             
+            }
+            setReload(true);
           })
-          .catch(error => {
-            console.error('POST Request Error:', error);
-          });
-
       } catch (error) {
         console.log('Error: ', error);
         setShowMessage("Usuario o contraseña incorrectos")
@@ -46,22 +61,22 @@ export default function Login() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={LoginStyles.container}>
       <Image
         source={{
           uri: "https://cdn-icons-png.flaticon.com/512/987/987815.png"
         }}
-        style={styles.image}
+        style={LoginStyles.image}
       />
-      <Text style={styles.text}>SIGEU</Text>
-      <Text style={styles.text}>Sistema Gestor de Exámenes Universitarios </Text>
-      <View style={styles.login}>
+      <Text style={LoginStyles.text}>SIGEU</Text>
+      <Text style={LoginStyles.text}>Sistema Gestor de Exámenes Universitarios </Text>
+      <View style={LoginStyles.login}>
         <Input
           placeholder='Email'
           label="correo electronico *"
           keyboardType="email-address"
-          labelStyle={styles.label}
-          inputStyle={styles.input}
+          labelStyle={LoginStyles.label}
+          inputStyle={LoginStyles.input}
           placeholderTextColor="#D9D9D9"
           onChange={({ nativeEvent: { text } }) => setEmail(text)}
           rightIcon={
@@ -76,8 +91,8 @@ export default function Login() {
         <Input
           placeholder='contraseña'
           label="contraseña *"
-          labelStyle={styles.label}
-          inputStyle={styles.input}
+          labelStyle={LoginStyles.label}
+          inputStyle={LoginStyles.input}
           placeholderTextColor="#D9D9D9"
           secureTextEntry={showPassword}
           onChange={({ nativeEvent: { text } }) => setPassword(text)}
@@ -93,8 +108,8 @@ export default function Login() {
         />
         <Button
           title='Iniciar Sesión'
-          containerStyle={styles.btnContainer}
-          buttonStyle={styles.btnStyle}
+          containerStyle={LoginStyles.btnContainer}
+          buttonStyle={LoginStyles.btnStyle}
           titleStyle={{ color: 'white' }}
           onPress={login}
         />
@@ -106,44 +121,3 @@ export default function Login() {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-    backgroundColor: '#119DA4'
-  },
-  image: {
-    width: 120,
-    height: 120,
-    resizeMode: "contain"
-  },
-  text: {
-    fontSize: 24,
-    color: "white",
-    textAlign: "center"
-  },
-  login: {
-    padding: 16,
-    marginTop: 16,
-    width: 350,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  label: {
-    color: "white"
-  },
-  input: {
-    color: "white"
-  },
-  btnContainer: {
-    width: '80%',
-  },
-  btnStyle: {
-    backgroundColor: '#039A00',
-    shadowColor: "black",
-    borderRadius: 5,
-  }
-})
