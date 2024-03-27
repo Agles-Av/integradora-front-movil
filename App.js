@@ -48,7 +48,7 @@ export default function App() {
 
   console.log("Admin", admin);
   console.log("Estudiante", student);
-  if (login) {
+  if (login) { 
     return (
       <Login setReload={setReload}   />
     )
