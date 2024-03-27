@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Login(props) {
-  const {setReload} = props;
+  const { setReload } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
@@ -25,8 +25,8 @@ export default function Login(props) {
       //proceso de inicio de sesión
       setShowMessage('');
       setVisible(true);
-      try { 
-        fetch('http://192.168.109.88:8080/api/auth/signin', {
+      try {
+        fetch('http://192.168.109.102:8080/api/auth/signin', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -35,17 +35,19 @@ export default function Login(props) {
         })
           .then(response => response.json())
           .then(data => {
+            const token = data.data.token;
             console.log('POST Request Result:', data.data.roles.name);
             setVisible(false);
-          
+            AsyncStorage.setItem('token', token);
+
             if (data.data.roles.name === 'ADMIN_ROLE') {
               console.log("entre");
               AsyncStorage.setItem('role', data.data.roles.name);
               //navigation.dispatch("HomeAdmin");
-            }else if (data.data.roles.name=== 'ESTUDIANTE_ROLE') {
+            } else if (data.data.roles.name === 'ESTUDIANTE_ROLE') {
               AsyncStorage.setItem('role', data.data.roles.name);
-             //navigation.dispatch("HomeEstudiante");
-             
+              //navigation.dispatch("HomeEstudiante");
+
             }
             setReload(true);
           })
