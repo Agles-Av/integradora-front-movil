@@ -67,7 +67,7 @@ export default function Login(props) {
           uri: "https://cdn-icons-png.flaticon.com/512/987/987815.png"
         }}
         style={LoginStyles.image}
-      />
+      /> 
       <Text style={LoginStyles.text}>SIGEU</Text>
       <Text style={LoginStyles.text}>Sistema Gestor de Exámenes Universitarios </Text>
       <View style={LoginStyles.login}>
