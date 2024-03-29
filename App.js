@@ -37,6 +37,7 @@ export default function App() {
 
 
   const getRole = async () => {
+    //const role =  await AsyncStorage.removeItem('role');
     const role =  await AsyncStorage.getItem('role');
     console.log("Recibiendo rol desde app", role);
     if (role === 'ADMIN_ROLE') {
