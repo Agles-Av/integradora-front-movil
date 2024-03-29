@@ -22,7 +22,7 @@ const NavigationEstudiante = () => {
     >
       <Tab.Screen name="HomeEstudianteStack"
        component={HomeStack} 
-      options={{ title: 'EstudianteHome' }} />
+      options={{ title: 'Examenes' }} />
     </Tab.Navigator>
     </NavigationContainer>
 

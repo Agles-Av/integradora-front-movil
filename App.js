@@ -1,20 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState,useReducer } from 'react';
+import { StyleSheet} from 'react-native';
 import NavigationAdmin from './src/modules/navigation/navigationAdmin/NavigationAdmin';
-import { NavigationContainer } from '@react-navigation/native'
-import { Icon } from '@rneui/base';
-import { createStackNavigator } from '@react-navigation/stack'
 import NavigationEstudiante from './src/modules/navigation/navigationEstudiante/NavigationEstudiante';
 import Login from './src/modules/auth/adapters/screens/Login';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import HomeEstudiante from './src/modules/estudiantehome/adapters/screens/HomeEstudiante';
+import AuthContext from './src/config/context/auth-context';
+import { AuthManager } from './src/config/context/auth-manager';
+
+const initialState = {
+  signed: false,
+  role: null,
+};
+
+const init = async () => {
+  const role = await AsyncStorage.getItem('role');
+  if (role) {
+    return { signed: true, role };
+  }
+  return initialState;
+};
 
 export default function App() {
-  const Stack = createStackNavigator();
-  const Tab = createBottomTabNavigator();
+  
+  const [state, dispatch] = useReducer(AuthManager, initialState, init);
 
-  const [student, setStudent] = useState(false);
+  useEffect(() => {
+    init().then((initialState) => dispatch({ type: 'INIT', ...initialState }));
+  }, []);
+
+
+  /*const [student, setStudent] = useState(false);
   const [admin, setAdmin] = useState(false);
   const [login, setLogin] = useState(true);
   const [reload, setReload] = useState(false);
@@ -44,23 +59,21 @@ export default function App() {
     getRole();
     setReload(false);
   }, [reload]);
+*/
 
-
-  console.log("Admin", admin);
-  console.log("Estudiante", student);
-  if (login) { 
-    return (
-      <Login setReload={setReload}   />
-    )
-  }else if (admin) {
-    return (
-      <NavigationAdmin />
-    )
-  }else if (student) {
-    return (
-      <NavigationEstudiante />
-    )
-  }
+return (
+  <AuthContext.Provider value={{ state, dispatch }}>
+    {state.signed ? (
+      state.role === 'ADMIN_ROLE' ? (
+        <NavigationAdmin />
+      ) : (
+        <NavigationEstudiante />
+      )
+    ) : (
+      <Login />
+    )}
+  </AuthContext.Provider>
+);
 
 }
 

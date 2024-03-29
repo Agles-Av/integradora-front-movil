@@ -1,59 +1,53 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Image, Input, Button, Icon } from '@rneui/base'
 import { isEmpty } from 'lodash';
 import Loading from '../../../../../kernel/components/Loading';
+import ErrorAlert from '../../../../../kernel/components/ErrorAlert';
 import { LoginStyles } from './constants/Index';
-//import { useNavigation } from '@react-navigation/native';
-import { StackActions } from '@react-navigation/native';
+import AxiosClient from '../../../../../config/http-gateway/http-cleint';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthContext from '../../../../../config/context/auth-context';
 
 
-
-export default function Login(props) {
-  const {setReload} = props;
+export default function Login() {
+  const {user,dispatch} = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const [showMessage, setShowMessage] = useState("");
   const [visible, setVisible] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
   //const navigation = useNavigation();
 
+  
+
   const sigin = { email, password };
+
   const login = async () => {
     if (!isEmpty(email) && !isEmpty(password)) {
       //proceso de inicio de sesión
       setShowMessage('');
       setVisible(true);
-      try { 
-        fetch('http://192.168.109.88:8080/api/auth/signin', {
+      try {
+        const response = await AxiosClient({
+          url: '/auth/signin',
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(sigin)
+          data: JSON.stringify(sigin)
+        }).then( async (response) => {
+          //hacer mipropio formato de datos
+          const userdata = response.data;
+          await AsyncStorage.setItem("user",JSON.stringify(userdata));
+          dispatch({ type: 'SIGNIN', token: response.data.token, role: response.data.role });
         })
-          .then(response => response.json())
-          .then(data => {
-            console.log('POST Request Result:', data.data.roles.name);
-            setVisible(false);
-          
-            if (data.data.roles.name === 'ADMIN_ROLE') {
-              console.log("entre");
-              AsyncStorage.setItem('role', data.data.roles.name);
-              //navigation.dispatch("HomeAdmin");
-            }else if (data.data.roles.name=== 'ESTUDIANTE_ROLE') {
-              AsyncStorage.setItem('role', data.data.roles.name);
-             //navigation.dispatch("HomeEstudiante");
-             
-            }
-            setReload(true);
-          })
       } catch (error) {
-        console.log('Error: ', error);
-        setShowMessage("Usuario o contraseña incorrectos")
-      } finally {
+        console.error(error);
+        setShowMessage("Usuario o contraseña incorrectos");
         setVisible(false);
+        setErrorAlert(true);
+        setTimeout(() => {
+          setErrorAlert(false);
+        }, 2000);
       }
     } else {
       setShowMessage('Campo obligatorio')
@@ -67,7 +61,7 @@ export default function Login(props) {
           uri: "https://cdn-icons-png.flaticon.com/512/987/987815.png"
         }}
         style={LoginStyles.image}
-      /> 
+      />
       <Text style={LoginStyles.text}>SIGEU</Text>
       <Text style={LoginStyles.text}>Sistema Gestor de Exámenes Universitarios </Text>
       <View style={LoginStyles.login}>
@@ -117,7 +111,19 @@ export default function Login(props) {
           visible={visible}
           title={"iniciando sesión"}
         />
+        <ErrorAlert
+          visibleError={errorAlert}
+          titleError={"Usuario o contraseña incorrectos"}
+        />
       </View>
     </View>
   )
+  /**
+   *  const userdata = {
+            token: response.data.token,
+            role: response.data.usuario.role.name,
+            id: response.data.usuario.id,
+            name: response.data.usuario.person.name
+          };
+   */
 }
