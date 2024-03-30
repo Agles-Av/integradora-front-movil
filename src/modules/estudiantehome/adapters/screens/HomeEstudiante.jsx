@@ -4,13 +4,16 @@ import AxiosClient from '../../../../config/http-gateway/http-cleint';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Icon, Button, Input } from '@rneui/base';
 import CodeExamModal from '../../components/CodeExamModal';
+import Loading from '../../../../kernel/components/Loading';
 
 export default function HomeEstudiante(props) {
+
   const {navigation} = props;
   const [idUser, setIdUser] = useState(0);
   const [examenesHechos, setExamenesHechos] = useState([])
   const [search, setSearch] = useState("")
   const [visibleCode, setVisibleCode] = useState(false)
+  const [cargandoExamen, setCargandoExamen] = useState(false);
 
   const getIdUSer = async () => {
     const datauser = JSON.parse(await AsyncStorage.getItem("user"));
@@ -29,12 +32,14 @@ export default function HomeEstudiante(props) {
 
 
   const getEameneshechos = async () => {
+    setCargandoExamen(true);
     try {
       const response = await AxiosClient({
         url: "/usuarioexamen/examen/" + idUser,
         method: 'GET',
       })
       setExamenesHechos(response.data);
+      setCargandoExamen(false);
     } catch (error) {
       console.error(error);
     }
@@ -75,8 +80,8 @@ export default function HomeEstudiante(props) {
         <Icon name="add" size={64} style={styles.searchIcon} color="#FFFF" onPress={()=>setVisibleCode(true)} />
         {console.log("home",visibleCode)}
       </View>
-      <CodeExamModal visibleCode={visibleCode}  />
-
+      <CodeExamModal visibleCode={visibleCode}  toggleModal={toggleModal} />
+      <Loading title={"Cargando historial..."} visible={cargandoExamen}/>
     </View>
   )
 }

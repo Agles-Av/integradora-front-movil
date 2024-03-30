@@ -37,7 +37,6 @@ const ExamenHistory = (props) => {
                 method: 'GET',
             })
             setRespuestaCorrecta(repsonse.data);
-            console.log(repsonse.data);
         } catch (error) {
             console.error(error);
         }

@@ -6,6 +6,7 @@ import { Header, getHeaderTitle } from '@react-navigation/elements';
 import HomeEstudiante from "../../../estudiantehome/adapters/screens/HomeEstudiante";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExamenHistory from '../../../estudiantehome/components/ExamenHistory';
+import HacerExamen from '../../../estudiantehome/components/HacerExamen';
 
 const Stack = createStackNavigator();
 
@@ -40,6 +41,15 @@ const HomeStack = () => {
       />
       <Stack.Screen name="ExamenHistory"
         component={ExamenHistory}
+        options={{
+          headerLeft: () => (
+            <Icon name="account-circle" type='material-community' color={'#13505B'} size={44} />
+          ),
+          headerTitle: "SIGEU - Estudiante " + namePerson, headerTintColor: '#13505B'
+        }}
+      />
+      <Stack.Screen name="Examen"
+        component={HacerExamen}
         options={{
           headerLeft: () => (
             <Icon name="account-circle" type='material-community' color={'#13505B'} size={44} />
