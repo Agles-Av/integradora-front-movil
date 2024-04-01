@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, TextInput } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -6,10 +6,12 @@ import AxiosClient from '../../../config/http-gateway/http-cleint';
 import ErrorAlert from '../../../kernel/components/ErrorAlert';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ExamenHechoAlert from '../../../kernel/components/ExamenHechoAlert';
 
 const CodeExamModal = ({ visibleCode, toggleModal }) => {
   const navigation = useNavigation();
   const [visibleError, setVisibleError] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       code: "" 
@@ -17,9 +19,7 @@ const CodeExamModal = ({ visibleCode, toggleModal }) => {
     validationSchema: yup.object().shape({
       code: yup.string().required("Ingresa un código de examen").max(6, "Máximo 6 caracteres").min(6, "Mínimo 6 caracteres")
     }),
-
     onSubmit: async (values,{setSubmitting}) => {
-      console.log(values);
       try {
         const response = await AxiosClient({
           url: '/examen/' + values.code,
@@ -41,6 +41,8 @@ const CodeExamModal = ({ visibleCode, toggleModal }) => {
       }
     }
   });
+
+
 
   const handleCancel=() =>{
     formik.resetForm();

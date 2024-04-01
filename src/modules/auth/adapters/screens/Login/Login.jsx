@@ -35,14 +35,14 @@ export default function Login() {
           url: '/auth/signin',
           method: 'POST',
           data: JSON.stringify(sigin)
-        }).then( async (response) => {
+        })
           //hacer mipropio formato de datos
           const userdata = response.data;
           await AsyncStorage.setItem("user",JSON.stringify(userdata));
-          dispatch({ type: 'SIGNIN', token: response.data.token, role: response.data.role });
-        })
+          dispatch({ type: 'SIGNIN', token: userdata.token, role: userdata.roles.name });
+          console.log("rol desde admin",userdata.roles.name);
       } catch (error) {
-        console.error(error);
+        console.error("error login",error);
         setShowMessage("Usuario o contraseña incorrectos");
         setVisible(false);
         setErrorAlert(true);
