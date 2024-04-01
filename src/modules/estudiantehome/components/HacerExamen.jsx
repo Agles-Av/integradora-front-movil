@@ -6,6 +6,7 @@ import AxiosClient from '../../../config/http-gateway/http-cleint';
 import SuccesfullAlert from '../../../kernel/components/SuccesfullAlert';
 import ErrorAlert from "../../../kernel/components/ErrorAlert";
 import EnviarRespuestasModal from './EnviarRespuestasModal';
+import ExamenHechoAlert from '../../../kernel/components/ExamenHechoAlert';
 
 const HacerExamen = (props) => {
     const { navigation } = props;
@@ -16,6 +17,17 @@ const HacerExamen = (props) => {
     const [idUser, setIdUser] = useState(0);
     const [selectRespuestas, setSelectRespuestas] = useState([]);
     const [enviarRespuestas, setEnviarRespuestas] = useState(false);
+    const [mostrar, setMostrar] = useState(false);
+    const [alreadyExist, setAlreadyExist] = useState([]);
+
+    const getIdUSer = async () => {
+        const datauser = JSON.parse(await AsyncStorage.getItem("user"));
+        const idusuario = datauser.user.id;
+        setIdUser(Number(idusuario));
+      }
+      useEffect(() => {
+        getIdUSer();
+      }, []);
 
     const saveRespuestasInJson = (preguntaId, respuestaId, textoRespuesta = "", tipo = false) => {
         setSelectRespuestas((prev) => {
@@ -44,6 +56,37 @@ const HacerExamen = (props) => {
           });
     };
 
+    const examenHecho =  () => {
+        alreadyExist.map((exame)=>{
+          if(exame === examenData.code){
+            navigate("/homeEstudiante", { replace: true });
+            setMostrar(true);
+            setTimeout(()=>{
+              setMostrar(false);
+            },2000);
+          }
+        })
+      }
+    
+      examenHecho();
+
+    const examenYaRealizado = async () => {
+        try {
+         const response = await AxiosClient({
+            url: "/usuariorespuesta/examencode/" + idUser,
+            method: 'GET',
+          })
+          setAlreadyExist(response.data);
+          console.log("Codigo hecho",response.data);
+        } catch (error) {
+         console.error("Error en extraer el codigo ya hecho",error); 
+        }
+      }
+    
+      useEffect(()=>{
+        examenYaRealizado();
+      },[]);
+
 
     const getExamenData = async () => {
         const examenData = JSON.parse(await AsyncStorage.getItem("examenData"));
@@ -65,7 +108,7 @@ const HacerExamen = (props) => {
             serErrorAlert(true);
             setTimeout(()=>{
                 serErrorAlert(false);
-            })
+            },2000)
         }else{
             toggleRes();
         }
@@ -146,6 +189,8 @@ const HacerExamen = (props) => {
             toggleRes={toggleRes}
             sendAnsewrs={sendAnsewrs}
             />
+
+        <ExamenHechoAlert visibleHecho={mostrar} titleHecho={"Examen ya realizado"}/>
         </View>
     );
 }
