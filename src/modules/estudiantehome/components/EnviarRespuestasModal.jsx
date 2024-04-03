@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
       },
       options:{
+        
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 10,
