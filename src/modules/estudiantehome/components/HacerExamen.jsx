@@ -156,6 +156,7 @@ const HacerExamen = (props) => {
             visibleRes={enviarRespuestas}
             toggleRes={toggleRes}
             sendAnsewrs={sendAnsewrs}
+            titleEnviar={"¿Estas seguro de enviar tus respuestas?"}
             />
         </View>
     );
