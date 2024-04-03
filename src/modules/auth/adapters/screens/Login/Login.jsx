@@ -34,7 +34,7 @@ export default function Login() {
         const response = await AxiosClient({
           url: '/auth/signin',
           method: 'POST',
-          data: JSON.stringify(sigin)
+          data: JSON.stringify(sigin),
         })
           //hacer mipropio formato de datos
           const userdata = response.data;
