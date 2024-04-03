@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, TextInput } from 'react-native';
 
-const EnviarRespuestasModal = ({visibleRes,toggleRes,sendAnsewrs}) => {
+const EnviarRespuestasModal = ({visibleRes,toggleRes,sendAnsewrs,titleEnviar}) => {
 
     const handleOk = () =>{
         sendAnsewrs();
@@ -19,6 +19,7 @@ const EnviarRespuestasModal = ({visibleRes,toggleRes,sendAnsewrs}) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+            <Text style={styles.title}>{titleEnviar}</Text>
               <View style={styles.options}>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
@@ -89,7 +90,14 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
       },
       options:{
+        
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginTop: 10,
       },
+      title:{
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+      }
 })
