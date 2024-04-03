@@ -41,6 +41,7 @@ export default function HomeEstudiante(props) {
       setExamenesHechos(response.data);
       setCargandoExamen(false);
     } catch (error) {
+      setCargandoExamen(false);
       console.error(error);
     }
   }

@@ -6,19 +6,17 @@ import AxiosClient from '../../../config/http-gateway/http-cleint';
 import SuccesfullAlert from '../../../kernel/components/SuccesfullAlert';
 import ErrorAlert from "../../../kernel/components/ErrorAlert";
 import EnviarRespuestasModal from './EnviarRespuestasModal';
-import ExamenHechoAlert from '../../../kernel/components/ExamenHechoAlert';
 
 const HacerExamen = (props) => {
     const { navigation } = props;
     const [succesfull, setSuccesfull] = useState(false);
     const [errorAlert, serErrorAlert] = useState(false);
     const [examenData, setExamenData] = useState([]);
+    const [code, setCode] = useState("");
     const [preguntas, setPreguntas] = useState([]);
     const [idUser, setIdUser] = useState(0);
     const [selectRespuestas, setSelectRespuestas] = useState([]);
     const [enviarRespuestas, setEnviarRespuestas] = useState(false);
-    const [mostrar, setMostrar] = useState(false);
-    const [alreadyExist, setAlreadyExist] = useState([]);
 
     const getIdUSer = async () => {
         const datauser = JSON.parse(await AsyncStorage.getItem("user"));
@@ -55,44 +53,14 @@ const HacerExamen = (props) => {
             }
           });
     };
-
-    const examenHecho =  () => {
-        alreadyExist.map((exame)=>{
-          if(exame === examenData.code){
-            navigate("/homeEstudiante", { replace: true });
-            setMostrar(true);
-            setTimeout(()=>{
-              setMostrar(false);
-            },2000);
-          }
-        })
-      }
     
-      examenHecho();
-
-    const examenYaRealizado = async () => {
-        try {
-         const response = await AxiosClient({
-            url: "/usuariorespuesta/examencode/" + idUser,
-            method: 'GET',
-          })
-          setAlreadyExist(response.data);
-          console.log("Codigo hecho",response.data);
-        } catch (error) {
-         console.error("Error en extraer el codigo ya hecho",error); 
-        }
-      }
-    
-      useEffect(()=>{
-        examenYaRealizado();
-      },[]);
-
 
     const getExamenData = async () => {
         const examenData = JSON.parse(await AsyncStorage.getItem("examenData"));
         const examen = examenData;
         setExamenData(examen);
         setPreguntas(examen.preguntas);
+        setCode(examen.code);
 
         //sacar el id
         const datauser = JSON.parse(await AsyncStorage.getItem("user"));
@@ -189,8 +157,6 @@ const HacerExamen = (props) => {
             toggleRes={toggleRes}
             sendAnsewrs={sendAnsewrs}
             />
-
-        <ExamenHechoAlert visibleHecho={mostrar} titleHecho={"Examen ya realizado"}/>
         </View>
     );
 }
