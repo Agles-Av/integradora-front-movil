@@ -3,32 +3,12 @@ import { Icon } from '@rneui/base';
 import React, { useEffect, useState } from 'react'
 import FlatlistUser from '../components/FlatlistUser'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const DATA = [
-    {
-        role: 'Docente',
-        name: 'Huico',
-    },
-    {
-        role: 'Docente',
-        name: 'Migue',
-    },
-    {
-        role: 'Docente',
-        name: 'Sebastian',
-    },
-    {
-        role: 'Estudiante',
-        name: 'Agles',
-    },
-    {
-        role: 'Estudiante',
-        name: 'Víctor',
-    },
-];
+import AxiosClient from '../../../../config/http-gateway/http-cleint';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function UsersLists() {
+    const navigation = useNavigation();
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -37,25 +17,22 @@ export default function UsersLists() {
 
     const getUsers = async () => {
         try {
-            const token = await AsyncStorage.getItem('token');
-            const response = await fetch('http://192.168.109.102:8080/api/usuario/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                }
-            }).then(response => response.json())
-            .then(data => {
-              console.log('POST Request Result:', data.data);
-            })
-            if (response === 'OK') {
-                setUsers(response.data);
-            } else {
-                console.error('Error:', responseData.message);
-            }
+            const response = await AxiosClient({
+                url: '/usuario/',
+                method:"GET",
+              })
+              setUsers(response.data);
         } catch (error) {
             console.error('Error:', error);
         }
+    }
+
+
+    const goCreate = () => {
+        navigation.navigate('CreateUser');
+    }
+    const goEdit = (data) => {
+        navigation.navigate('UpdateUser', {data});
     }
 
     return (
@@ -65,7 +42,7 @@ export default function UsersLists() {
 
                     activeOpacity={0.6}
                     underlayColor="#DDDDDD"
-                    onPress={() => alert(('Aah'))}
+                    onPress={goCreate}
                 >
                     <Icon name="plus-circle" type='material-community' size={44} color="#13505B" />
                 </TouchableHighlight>
@@ -76,8 +53,8 @@ export default function UsersLists() {
                     <TouchableHighlight
                         activeOpacity={0.6}
                         underlayColor="#DDDDDD"
-                        onPress={() => alert(item)}>
-                        <FlatlistUser rol={item.role.name} name={item.name} />
+                        onPress={() => goEdit(item)}>
+                        <FlatlistUser rol={item.role.name} name={item.person.name} status={item.status}/>
                     </TouchableHighlight>
                 }
             />
