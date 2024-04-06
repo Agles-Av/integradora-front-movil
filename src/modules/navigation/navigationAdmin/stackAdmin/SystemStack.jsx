@@ -5,15 +5,17 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Header, getHeaderTitle } from '@react-navigation/elements';
 import { Icon } from '@rneui/base';
 import ColorModal from '../../../adminhome/adapters/components/ColorModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Login from '../../../auth/adapters/screens/Login';
+
 const Stack = createStackNavigator();
+
 
 export default function SystemStack() {
   return (
     <Stack.Navigator
         screenOptions={{
-            header: ({ options, route }) => (
-                <Header {...options} title={getHeaderTitle(options, route.name)} />
-            ),
+            headerShown: false,
         }}
     >
         <Stack.Screen
@@ -25,6 +27,7 @@ export default function SystemStack() {
                 headerTitle:'SIGEU - Administrador', headerTintColor:'#13505B'
         }}
         />
+        
         <Stack.Screen
             name="ColorModal"
             component={ColorModal}

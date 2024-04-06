@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Image, Input, Button, Icon } from '@rneui/base'
 import { isEmpty } from 'lodash';
 import Loading from '../../../../../kernel/components/Loading';
@@ -14,6 +14,8 @@ import AuthContext from '../../../../../config/context/auth-context';
 export default function Login() {
   const {user,dispatch} = useContext(AuthContext);
   const [email, setEmail] = useState("");
+  const [colors, setColors] = useState([]);
+  const [photoURL, setPhotoURL] = useState([{id:"1",logo:""}]);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const [showMessage, setShowMessage] = useState("");
@@ -21,9 +23,45 @@ export default function Login() {
   const [errorAlert, setErrorAlert] = useState(false);
   //const navigation = useNavigation();
 
-  
-
   const sigin = { email, password };
+  console.log("AEAAH");
+
+  useEffect(() => {
+    const fetchColors = async () => {
+      const colors = await getColorsFromStorage();
+      const logo = await getLogoFromStorage();
+      if (colors) {
+        // Hacer algo con los colores obtenidos, como actualizar el estado
+        setPhotoURL(logo);
+        setColors(colors);
+      }
+    };
+  
+    fetchColors();
+  }, []);
+  console.log("colors", colors);
+  console.log("photoURL", photoURL);
+  const getLogoFromStorage = async () => {
+    try {
+      const logoData = await AsyncStorage.getItem('logo');
+      if (logoData !== null) {
+        return JSON.parse(logoData);
+      }
+    } catch (error) {
+      console.error('Error al obtener logo de AsyncStorage:', error);
+    }
+  }
+
+  const getColorsFromStorage = async () => {
+    try {
+      const colorsData = await AsyncStorage.getItem('colors');
+      if (colorsData !== null) {
+        return JSON.parse(colorsData);
+      }
+    } catch (error) {
+      console.error('Error al obtener colores de AsyncStorage:', error);
+    }
+  };
 
   const login = async () => {
     if (!isEmpty(email) && !isEmpty(password)) {
@@ -56,10 +94,10 @@ export default function Login() {
   }
 
   return (
-    <View style={LoginStyles.container}>
+    <View style={[LoginStyles.container, { backgroundColor: colors.length > 0 ? colors[0].color1 : '#119DA4' }]}>
       <Image
         source={{
-          uri: "https://cdn-icons-png.flaticon.com/512/987/987815.png"
+          uri: photoURL.length > 0 ? photoURL[0].logo : "https://cdn-icons-png.flaticon.com/512/987/987815.png"
         }}
         style={LoginStyles.image}
       />

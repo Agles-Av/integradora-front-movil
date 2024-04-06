@@ -1,16 +1,42 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Icon } from '@rneui/base'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FlatlistUser(props) {
     const {rol, name, status} = props
+    const [colors, setColors] = useState([]);
+    useEffect(() => {
+        const fetchColors = async () => {
+          const colors = await getColorsFromStorage();
+          if (colors) {
+            // Hacer algo con los colores obtenidos, como actualizar el estado
+            
+            setColors(colors);
+          }
+        };
+      
+        fetchColors();
+      }, []);
+      console.log("colors", colors);
+      const getColorsFromStorage = async () => {
+        try {
+          const colorsData = await AsyncStorage.getItem('colors');
+          if (colorsData !== null) {
+            return JSON.parse(colorsData);
+          }
+        } catch (error) {
+          console.error('Error al obtener colores de AsyncStorage:', error);
+        }
+      };
+
   return (
     <View style={{
       justifyContent: 'space-between' ,
     flexDirection: 'row',
     padding: 18,
     marginBottom: 12,
-    backgroundColor: status ? '#119DA4' : '#7A7A7A',
+    backgroundColor: status ? colors.length > 0 ? colors[0].color1:'#119DA4' : '#7A7A7A',
 
     // shadow ios
     shadowColor: 'black',

@@ -65,14 +65,14 @@ export default function App() {
 return (
   <AuthContext.Provider value={{ state, dispatch }}>
     {state.signed ? (
-      state.role === 'ADMIN_ROLE' ? (
-        <NavigationAdmin />
-      ) : (
-        <NavigationEstudiante />
-      )
-    ) : (
-      <Login />
-    )}
+  state.role === 'ADMIN_ROLE' ? (
+    <NavigationAdmin />
+  ) : state.role === 'ESTUDIANTE_ROLE' ? (
+    <NavigationEstudiante />
+  ) : <Login /> // Agrega un valor de retorno para el caso en que el rol no sea ni 'ADMIN_ROLE' ni 'ESTUDIANTE_ROLE'
+) : (
+  <Login />
+)}
   </AuthContext.Provider>
 );
 

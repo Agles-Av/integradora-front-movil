@@ -94,7 +94,7 @@ export default function ColorModal({ route, visibleCode, toggleModal }) {
             console.log(payload);
             const response = await AxiosClient({
                 method: 'PUT',
-                url: '/sistema/',
+                url: '/publico/sistema/',
                 data: payload
             });
             if (response.status === 'OK') {
