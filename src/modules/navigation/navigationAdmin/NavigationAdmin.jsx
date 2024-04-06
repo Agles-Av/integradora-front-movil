@@ -30,11 +30,6 @@ export default function NavigationAdmin() {
         options={{ title: 'Users' }}
       />
       <Tab.Screen
-        name='index'
-        component={HomeStack}
-        options={{ title: 'Home' }}
-      />
-      <Tab.Screen
         name='SystemStack'
         component={SystemStack}
         options={{ title: 'System' }}

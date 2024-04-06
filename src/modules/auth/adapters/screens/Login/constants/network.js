@@ -7,7 +7,7 @@ export const handleLogin = async (email, password) => {
         password: password
     }
      try {
-       fetch('http://192.168.1.69:8080/api/auth/signin', {
+       fetch('http://192.168.1.73:8080/api/auth/signin', {
          method: 'POST',
          headers: {
            'Content-Type': 'application/json'
