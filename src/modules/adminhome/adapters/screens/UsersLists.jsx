@@ -8,6 +8,32 @@ import { useNavigation } from '@react-navigation/native';
 
 
 export default function UsersLists() {
+    const [colors, setColors] = useState([]);
+    useEffect(() => {
+        const fetchColors = async () => {
+          const colors = await getColorsFromStorage();
+          if (colors) {
+            // Hacer algo con los colores obtenidos, como actualizar el estado
+            
+            setColors(colors);
+          }
+        };
+      
+        fetchColors();
+      }, []);
+      console.log("colors", colors);
+      const getColorsFromStorage = async () => {
+        try {
+          const colorsData = await AsyncStorage.getItem('colors');
+          if (colorsData !== null) {
+            return JSON.parse(colorsData);
+          }
+        } catch (error) {
+          console.error('Error al obtener colores de AsyncStorage:', error);
+        }
+      };
+
+
     const navigation = useNavigation();
     const [users, setUsers] = useState([]);
 
@@ -44,7 +70,7 @@ export default function UsersLists() {
                     underlayColor="#DDDDDD"
                     onPress={goCreate}
                 >
-                    <Icon name="plus-circle" type='material-community' size={44} color="#13505B" />
+                    <Icon name="plus-circle" type='material-community' size={44} color= {colors.length > 0 ? colors[0].color3:'#13505B'} />
                 </TouchableHighlight>
             </View>
             <FlatList

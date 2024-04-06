@@ -15,6 +15,32 @@ export default function HomeEstudiante(props) {
   const [visibleCode, setVisibleCode] = useState(false)
   const [cargandoExamen, setCargandoExamen] = useState(false);
 
+  
+  const [colors, setColors] = useState([]);
+  useEffect(() => {
+      const fetchColors = async () => {
+        const colors = await getColorsFromStorage();
+        if (colors) {
+          // Hacer algo con los colores obtenidos, como actualizar el estado
+          
+          setColors(colors);
+        }
+      };
+    
+      fetchColors();
+    }, []);
+    console.log("colors", colors);
+    const getColorsFromStorage = async () => {
+      try {
+        const colorsData = await AsyncStorage.getItem('colors');
+        if (colorsData !== null) {
+          return JSON.parse(colorsData);
+        }
+      } catch (error) {
+        console.error('Error al obtener colores de AsyncStorage:', error);
+      }
+    };
+
   const getIdUSer = async () => {
     const datauser = JSON.parse(await AsyncStorage.getItem("user"));
     const idusuario = datauser.user.id;
@@ -38,6 +64,7 @@ export default function HomeEstudiante(props) {
         url: "/usuarioexamen/examen/" + idUser,
         method: 'GET',
       })
+      console.log("response", response.data);
       setExamenesHechos(response.data);
       setCargandoExamen(false);
     } catch (error) {
@@ -68,7 +95,7 @@ export default function HomeEstudiante(props) {
       {filteredExamenes
         .map((itemmap, index) => (
           <TouchableOpacity key={index} onPress={()=> navigation.navigate("ExamenHistory",itemmap)}>
-            <View style={styles.row}>
+            <View style={[styles.row, { backgroundColor: colors.length > 0 ? colors[0].color1 : '#119DA4' }]}>
               <View style={styles.col}>
                 <Icon name="book" size={28} color="white" />
                 <Text style={styles.titlemap}>{itemmap.examen.title}</Text>

@@ -11,51 +11,21 @@ import HacerExamen from '../../../estudiantehome/components/HacerExamen';
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
-  const [namePerson, setNamePerson] = useState("");
-
-  const getPersonName = async () => {
-    const dataUser = JSON.parse(await AsyncStorage.getItem("user"));
-    const namePerson = dataUser.user.person.name;
-    setNamePerson(namePerson);
-  }
-  useEffect(() => {
-    getPersonName();
-  });
 
   return (
     <Stack.Navigator
       screenOptions={{
-        header: ({ options, route }) => (
-          <Header {...options} title={getHeaderTitle(options, route.name)} />
-        ),
+        headerShown: false,
       }}
     >
       <Stack.Screen name="index"
         component={HomeEstudiante}
-        options={{
-          headerLeft: () => (
-            <Icon name="account-circle" type='material-community' color={'#13505B'} size={44} />
-          ),
-          headerTitle: "SIGEU - Estudiante " + namePerson, headerTintColor: '#13505B'
-        }}
       />
       <Stack.Screen name="ExamenHistory"
         component={ExamenHistory}
-        options={{
-          headerLeft: () => (
-            <Icon name="account-circle" type='material-community' color={'#13505B'} size={44} />
-          ),
-          headerTitle: "SIGEU - Estudiante " + namePerson, headerTintColor: '#13505B'
-        }}
       />
       <Stack.Screen name="Examen"
         component={HacerExamen}
-        options={{
-          headerLeft: () => (
-            <Icon name="account-circle" type='material-community' color={'#13505B'} size={44} />
-          ),
-          headerTitle: "SIGEU - Estudiante " + namePerson, headerTintColor: '#13505B'
-        }}
       />
     </Stack.Navigator>
   )

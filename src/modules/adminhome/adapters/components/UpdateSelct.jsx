@@ -6,7 +6,7 @@ import { useFormik, FormikProvider } from 'formik';
 import * as yup from 'yup';
 import AxiosClient from '../../../../config/http-gateway/http-cleint';
 
-export default function UpdateUser(props) {
+export default function UpdateSelct(props) {
     console.log("props", props.route.params.data);
     const { params } = props.route;
     console.log("params", params);
@@ -20,16 +20,16 @@ export default function UpdateUser(props) {
 
     const formik = useFormik({
         initialValues: {
-            id:params.data.id,
-            email: params.data.email,
-            password: params.data.password,
-            role: [{id:params.data.role.id}],
+            id:params.id,
+            email: params.email,
+            password: params.password,
+            role: [{id:params.role.id}],
             status: true,
-            name: params.data.person.name,
-            surname: params.data.person.surname,
-            lastname: params.data.person.lastname,
-            curp: params.data.person.curp,
-            matricula: params.data.person.matricula,
+            name: params.person.name,
+            surname: params.person.surname,
+            lastname: params.person.lastname,
+            curp: params.person.curp,
+            matricula: params.person.matricula,
         },
         validationSchema: yup.object().shape({
             email: yup.string().required('El correo es requerido').email('El correo no es valido'),
@@ -114,17 +114,6 @@ export default function UpdateUser(props) {
                     id='email'
                 />
 
-                <Picker
-                    selectedValue={formik.values.role}
-                    onValueChange={formik.handleChange('role')}
-                    style={{ height: 50, width: 200 }}
-                >
-                    <Picker.Item label="Selecciona un rol" value="" />
-                    <Picker.Item label="Administrador" value="1" />
-                    <Picker.Item label="Docente" value="2" />
-                    <Picker.Item label="Estudiante" value="3" />
-                </Picker>
-
                 <Input
                     placeholder='Víctor'
                     label='Nombre: *'
@@ -186,13 +175,6 @@ export default function UpdateUser(props) {
                         buttonStyle={styles.btnStyle}
                         titleStyle={{ color: '#fff', marginBottom: 8 }}
                         onPress={formik.handleSubmit}
-                    />
-                     <Button
-                        title='Cambiar estado'
-                        containerStyle={styles.btnContainer}
-                        buttonStyle={styles.btnStyle}
-                        titleStyle={{ color: '#fff', marginBottom: 8}}
-                        onPress={changeStatus}
                     />
                 </View>
             </ScrollView>

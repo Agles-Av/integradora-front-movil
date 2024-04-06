@@ -50,7 +50,7 @@ export default function System() {
         try {
             setLoading(true);
             const response = await AxiosClient({
-                url: "/logo/",
+                url: "/publico/logo/",
                 method: "GET",
             });
             if (response.status === 'OK') {
@@ -78,7 +78,7 @@ export default function System() {
             try {
                 const response = await AxiosClient({
                     method: 'PUT',
-                    url: '/logo/',
+                    url: '/publico/logo/',
                     data: payload,
                 });
                 getLogo();
@@ -110,7 +110,7 @@ export default function System() {
         try {
             setLoading(true);
             const response = await AxiosClient({
-                url: "/sistema/",
+                url: "/publico/sistema/",
                 method: "GET",
             });
             if (response.status === 'OK') {

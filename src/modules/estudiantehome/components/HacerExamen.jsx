@@ -9,6 +9,7 @@ import EnviarRespuestasModal from './EnviarRespuestasModal';
 
 const HacerExamen = (props) => {
     const { navigation } = props;
+    const [preguntasMostradas, setPreguntasMostradas] = useState([]);
     const [succesfull, setSuccesfull] = useState(false);
     const [errorAlert, serErrorAlert] = useState(false);
     const [examenData, setExamenData] = useState([]);
@@ -17,6 +18,33 @@ const HacerExamen = (props) => {
     const [idUser, setIdUser] = useState(0);
     const [selectRespuestas, setSelectRespuestas] = useState([]);
     const [enviarRespuestas, setEnviarRespuestas] = useState(false);
+    const [numeroPreguntas, setNumeroPreguntas] = useState(null);
+
+    
+    const [colors, setColors] = useState([]);
+    useEffect(() => {
+        const fetchColors = async () => {
+          const colors = await getColorsFromStorage();
+          if (colors) {
+            // Hacer algo con los colores obtenidos, como actualizar el estado
+            
+            setColors(colors);
+          }
+        };
+      
+        fetchColors();
+      }, []);
+      console.log("colors", colors);
+      const getColorsFromStorage = async () => {
+        try {
+          const colorsData = await AsyncStorage.getItem('colors');
+          if (colorsData !== null) {
+            return JSON.parse(colorsData);
+          }
+        } catch (error) {
+          console.error('Error al obtener colores de AsyncStorage:', error);
+        }
+      };
 
     const getIdUSer = async () => {
         const datauser = JSON.parse(await AsyncStorage.getItem("user"));
@@ -61,6 +89,7 @@ const HacerExamen = (props) => {
         setExamenData(examen);
         setPreguntas(examen.preguntas);
         setCode(examen.code);
+        setNumeroPreguntas(examen.numeroPreguntas);
 
         //sacar el id
         const datauser = JSON.parse(await AsyncStorage.getItem("user"));
@@ -71,8 +100,20 @@ const HacerExamen = (props) => {
         getExamenData();
     }, []);
 
+    const [mostrar, setMostrar] = useState(false);
+
+    useEffect(() => { 
+        const shuffleQuestions = (preguntas) => {
+          return preguntas.sort(() => Math.random() - 0.5);
+        };
+    
+        const preguntasAleatorias = shuffleQuestions(preguntas);
+        const preguntasMostradas = preguntasAleatorias.slice(0, numeroPreguntas);
+        setPreguntasMostradas(preguntasMostradas);
+      }, [preguntas, numeroPreguntas]); // Ejecutar solo una vez al cargar el componente
+
     const handleSubmmit = async () => {
-        if(selectRespuestas.length < preguntas.length){
+        if(selectRespuestas.length < preguntasMostradas.length){
             serErrorAlert(true);
             setTimeout(()=>{
                 serErrorAlert(false);
@@ -80,7 +121,6 @@ const HacerExamen = (props) => {
         }else{
             toggleRes();
         }
-        console.log("Respuestas",selectRespuestas);
     };
 
     const toggleRes = () => {
@@ -113,7 +153,7 @@ const HacerExamen = (props) => {
                     <Text style={styles.title}>Examen: {examenData?.title}</Text>
                     <Text style={styles.description}>{examenData?.description}</Text>
                 </View>
-                {preguntas.map((pregunta, indexPregunta) => (
+                {preguntasMostradas.map((pregunta, indexPregunta) => (
                     <View key={indexPregunta} style={styles.questions}>
                         <Text style={styles.questionTitle}>{pregunta.name}</Text>
                         {pregunta.tipo ? (
@@ -141,7 +181,7 @@ const HacerExamen = (props) => {
                 <Button
                     title={"Enviar respuestas"}
                     onPress={() => handleSubmmit()}
-                    style={styles.sendAnswers}
+                    buttonStyle={[styles.sendAnswers, { backgroundColor: colors.length > 0 ? colors[0].color1 : '#119DA4' }]}
                 />
             </ScrollView>
             <SuccesfullAlert
