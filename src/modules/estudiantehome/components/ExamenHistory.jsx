@@ -6,6 +6,7 @@ import AxiosClient from '../../../config/http-gateway/http-cleint';
 
 const ExamenHistory = (props) => {
     const [examenData, setExamenData] = useState(null);
+    const [limitePreguntas, setLimitePreguntas] = useState(0); 
     const [preguntas, setPreguntas] = useState([]);
     const [idUser, setIdUser] = useState(0);
     const [idExamen, setIdExamen] = useState(0); 
@@ -20,6 +21,7 @@ const ExamenHistory = (props) => {
         getIdUSer();
         const itemmap = props.route.params;
         setExamenData(itemmap);
+        setLimitePreguntas(itemmap.examen.numeroPreguntas);
         setIdExamen(itemmap.examen.id);
         setPreguntas(itemmap.examen.preguntas);
     }, []);
@@ -56,7 +58,7 @@ const ExamenHistory = (props) => {
                     <Text style={styles.title}>Examen: {examenData?.examen.title}</Text>
                     <Text style={styles.description}>{examenData?.examen.description}</Text>
                 </View>
-                {preguntas.map((pregunta, indexPregunta) => (
+                {preguntas.slice(0,limitePreguntas).map((pregunta, indexPregunta) => (
                    <View key={indexPregunta} style={[styles.questions, { borderColor: getBorderColor(indexPregunta), borderWidth: 1 }]}>
                         <Text style={styles.questionTitle}>{pregunta.name}</Text>
                         {pregunta.tipo ? (
