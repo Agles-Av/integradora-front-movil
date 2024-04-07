@@ -10,7 +10,7 @@ import UpdateSelct from '../../adminhome/adapters/components/UpdateSelct';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { update } from 'lodash';
 import AxiosClient from '../../../config/http-gateway/http-cleint';
-import { getColorsFromServer } from '../../../config/colors/colorService';
+import { getColorsFromServer, getLogoFromServer } from '../../../config/colors/colorService';
 
 const Tab = createBottomTabNavigator();
 const NavigationEstudiante = () => {
