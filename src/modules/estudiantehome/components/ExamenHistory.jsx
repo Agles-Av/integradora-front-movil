@@ -81,7 +81,7 @@ const ExamenHistory = (props) => {
                 {preguntas.map((pregunta, indexPregunta) => {
                     const respuestasPregunta = respuestasLimite.filter(respuesta => respuesta.pregunta.id === pregunta.id);
 
-                    if (respuestasPregunta.length > 0 && indexPregunta < limitePreguntas) {
+                    if (respuestasPregunta.length > 0 ) {
                         return (
                             <View key={indexPregunta} style={[styles.questions, { borderColor: getBorderColor(indexPregunta), borderWidth: 1 }]}>
                                 <Text style={styles.questionTitle}>{pregunta.name}</Text>
