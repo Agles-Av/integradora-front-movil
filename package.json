@@ -11,8 +11,8 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/masked-view": "^0.1.11",
-    "@react-native-community/slider": "^4.5.0",
-    "@react-native-picker/picker": "^2.7.2",
+    "@react-native-community/slider": "4.4.2",
+    "@react-native-picker/picker": "2.6.1",
     "@react-navigation/bottom-tabs": "^6.5.14",
     "@react-navigation/stack": "^6.3.23",
     "@rneui/base": "^4.0.0-rc.7",

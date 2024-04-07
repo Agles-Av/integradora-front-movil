@@ -12,10 +12,10 @@ import AuthContext from '../../../../../config/context/auth-context';
 
 
 export default function Login() {
-  const {user,dispatch} = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [colors, setColors] = useState([]);
-  const [photoURL, setPhotoURL] = useState([{id:"1",logo:""}]);
+  const [photoURL, setPhotoURL] = useState([]);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const [showMessage, setShowMessage] = useState("");
@@ -36,11 +36,9 @@ export default function Login() {
         setColors(colors);
       }
     };
-  
+
     fetchColors();
   }, []);
-  console.log("colors", colors);
-  console.log("photoURL", photoURL);
   const getLogoFromStorage = async () => {
     try {
       const logoData = await AsyncStorage.getItem('logo');
@@ -74,13 +72,13 @@ export default function Login() {
           method: 'POST',
           data: JSON.stringify(sigin),
         })
-          //hacer mipropio formato de datos
-          const userdata = response.data;
-          await AsyncStorage.setItem("user",JSON.stringify(userdata));
-          dispatch({ type: 'SIGNIN', token: userdata.token, role: userdata.roles.name });
-          console.log("rol desde admin",userdata.roles.name);
+        //hacer mipropio formato de datos
+        const userdata = response.data;
+        await AsyncStorage.setItem("user", JSON.stringify(userdata));
+        dispatch({ type: 'SIGNIN', token: userdata.token, role: userdata.roles.name });
+        console.log("rol desde admin", userdata.roles.name);
       } catch (error) {
-        console.error("error login",error);
+        console.error("error login", error);
         setShowMessage("Usuario o contraseña incorrectos");
         setVisible(false);
         setErrorAlert(true);
@@ -95,12 +93,21 @@ export default function Login() {
 
   return (
     <View style={[LoginStyles.container, { backgroundColor: colors.length > 0 ? colors[0].color1 : '#119DA4' }]}>
-      <Image
-        source={{
-          uri: photoURL.length > 0 ? photoURL[0].logo : "https://cdn-icons-png.flaticon.com/512/987/987815.png"
-        }}
-        style={LoginStyles.image}
-      />
+      {photoURL.length > 0 ? (
+        <Image
+          source={{
+            uri: photoURL[0].logo
+          }}
+          style={LoginStyles.image}
+        />
+      ) : (
+        <Image
+          source={{
+            uri: "https://cdn-icons-png.flaticon.com/512/987/987815.png"
+          }}
+          style={LoginStyles.image}
+        />
+      )}
       <Text style={LoginStyles.text}>SIGEU</Text>
       <Text style={LoginStyles.text}>Sistema Gestor de Exámenes Universitarios </Text>
       <View style={LoginStyles.login}>
