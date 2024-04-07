@@ -96,7 +96,7 @@ export default function System() {
         getLogo();
         getColors();
     }, [reload]);
-
+    console.log("colors", colors);
 
     const getColors = async () => {
         try {

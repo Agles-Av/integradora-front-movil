@@ -12,6 +12,7 @@ import { update } from 'lodash';
 import AxiosClient from '../../../config/http-gateway/http-cleint';
 import { getColorsFromServer,getLogoFromServer } from '../../../config/colors/colorService';
 
+
 const Tab = createBottomTabNavigator();
 const NavigationEstudiante = () => {
   const [colors, setColors] = useState([]);
