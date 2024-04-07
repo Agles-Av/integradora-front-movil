@@ -91,7 +91,6 @@ export default function CreateUser(props) {
                     <Input
                         placeholder='ejemplo@gmail.com'
                         label='Correo electrónico: *'
-                        keyboardType='email-address'
                         onChangeText={formik.handleChange('email')}
                         value={formik.values.email}
                         labelStyle={styles.label}
@@ -119,7 +118,6 @@ export default function CreateUser(props) {
                     <Input
                         placeholder='*********'
                         label='Contraseña: *'
-                        keyboardType='password'
                         onChangeText={formik.handleChange('password')}
                         value={formik.values.password}
                         labelStyle={styles.label}
@@ -139,7 +137,6 @@ export default function CreateUser(props) {
                     <Input
                         placeholder='********'
                         label='Confirmar contraseña: *'
-                        keyboardType='password'
                         onChangeText={formik.handleChange('confirm')}
                         value={formik.values.confirm}
                         labelStyle={styles.label}
@@ -159,7 +156,6 @@ export default function CreateUser(props) {
                     <Input
                         placeholder='Víctor'
                         label='Nombre: *'
-                        keyboardType='text'
                         onChangeText={formik.handleChange('name')}
                         value={formik.values.name}
                         labelStyle={styles.label}
@@ -170,7 +166,6 @@ export default function CreateUser(props) {
                     <Input
                         placeholder='Barrera'
                         label='Apellido Materno: *'
-                        keyboardType='text'
                         onChangeText={formik.handleChange('surname')}
                         value={formik.values.surname}
                         labelStyle={styles.label}
@@ -181,7 +176,6 @@ export default function CreateUser(props) {
                     <Input
                         placeholder='Ocampo'
                         label='Apellido Paterno: *'
-                        keyboardType='text'
                         onChangeText={formik.handleChange('lastname')}
                         value={formik.values.lastname}
                         labelStyle={styles.label}
@@ -191,7 +185,6 @@ export default function CreateUser(props) {
                     <Input
                         placeholder='MNBO030625HMGRBBA7'
                         label='CURP: *'
-                        keyboardType='text'
                         onChangeText={formik.handleChange('curp')}
                         value={formik.values.curp}
                         labelStyle={styles.label}
@@ -202,7 +195,6 @@ export default function CreateUser(props) {
                     <Input
                         placeholder='20223abxyz'
                         label='Matricula: *'
-                        keyboardType='text'
                         onChangeText={formik.handleChange('matricula')}
                         value={formik.values.matricula}
                         labelStyle={styles.label}

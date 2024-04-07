@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function System() {
     const [loading, setLoading] = useState(false);
-    const [photoURL, setPhotoURL] = useState([{ id: 1, logo: '' }]);
+    const [photoURL, setPhotoURL] = useState([]);
     const [newPhotoBase64, setNewPhotoBase64] = useState(null);
     const [visible, setVisible] = useState(false);
 
@@ -90,21 +90,13 @@ export default function System() {
         },
     });
     const [colors, setColors] = useState([{ color1: '#000000', color2: '#000000', color3: '#000000' }]);
-    const [reload,setReload] = useState(false);
+    const [reload, setReload] = useState(false);
 
     useEffect(() => {
         getLogo();
         getColors();
-        if (photoURL && photoURL[0].logo && Array.isArray(photoURL[0].logo) && photoURL[0].length > 0) {
-            // Asignar la primera URL de la matriz logo a la propiedad uri
-            source = { uri: photoURL[0].logo };
-        } else {
-            // Si photoURL no está definido o no tiene una propiedad logo válida, asignar null a la propiedad uri
-            source = null;
-        }
-        
     }, [reload]);
-    
+
 
     const getColors = async () => {
         try {
@@ -136,25 +128,36 @@ export default function System() {
         setSelectedColor(color); // Actualizar el color seleccionado
         setVisibleCode(true); // Abrir el modal
         console.log(visibleCode);
-        navigation.navigate('ColorModal', { color: color, dataColor: dataColor, id: id});
+        navigation.navigate('ColorModal', { color: color, dataColor: dataColor, id: id });
     }
-    
+
     const toggleModal = () => {
         setVisibleCode(!visibleCode);
-      };
+    };
 
     return (
         <View style={styles.container}>
-            <Avatar
-                source={{ uri: photoURL[0].logo }}
-                resizeMode='contain'
-                size={230}
-                rounded
-            >
-                <Avatar.Accessory size={24} onPress={changeAvatar} />
-            </Avatar>
+            {photoURL.length > 0 ? (
+                <Avatar
+                    source={{ uri: photoURL[0].logo }}
+                    resizeMode='contain'
+                    size={230}
+                    rounded
+                >
+                    <Avatar.Accessory size={24} onPress={changeAvatar} />
+                </Avatar>
+            ) : (
+                <Avatar
+                    source={{ uri: "https://cdn-icons-png.flaticon.com/512/987/987815.png"}}
+                    resizeMode='contain'
+                    size={230}
+                    rounded
+                >
+                    <Avatar.Accessory size={24} onPress={changeAvatar} />
+                </Avatar>
+            )}
             <View style={styles.row}>
-                <Button title="Color A" buttonStyle={{ backgroundColor: colors[0].color1}} onPress={() => changecolor(colors[0].color1, colors, 1)} />
+                <Button title="Color A" buttonStyle={{ backgroundColor: colors[0].color1 }} onPress={() => changecolor(colors[0].color1, colors, 1)} />
                 <Button title="Color B" buttonStyle={{ backgroundColor: colors[0].color2 }} onPress={() => changecolor(colors[0].color2, colors, 2)} />
                 <Button title="Color C" buttonStyle={{ backgroundColor: colors[0].color3 }} onPress={() => changecolor(colors[0].color3, colors, 3)} />
             </View>
