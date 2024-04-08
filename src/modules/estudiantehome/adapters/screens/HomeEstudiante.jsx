@@ -104,7 +104,7 @@ export default function HomeEstudiante(props) {
             </View>
           </TouchableOpacity>
         )):(
-          <Text style={styles.calf}>No hay examenes realizados</Text>
+          <Text style={styles.title}>No hay examenes realizados</Text>
         )
         }
       <View style={styles.buttonSearch}>
