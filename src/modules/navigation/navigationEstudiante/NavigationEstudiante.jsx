@@ -105,6 +105,7 @@ useEffect(() => {
     try {
       setIdUser(null);
       dispatch({ type: 'SIGNOUT' });
+      AsyncStorage.clear();
     } catch (error) {
         console.error('Error al limpiar AsyncStorage:', error);
     }
