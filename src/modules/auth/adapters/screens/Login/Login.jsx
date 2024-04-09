@@ -43,8 +43,6 @@ export default function Login() {
 
     fetchColors();
   }, []);
-  console.log("colors", colors);
-  console.log("photoURL", photoURL);
 
   const saveColorsToStorage = async (colors) => {
     try {
@@ -65,18 +63,20 @@ export default function Login() {
 
   const login = async () => {
     if (!isEmpty(email) && !isEmpty(password)) {
-      //proceso de inicio de sesión
       setShowMessage('');
       setVisible(true);
+      console.log('banana1');
       try {
+        console.log('banana2');
         const response = await AxiosClient({
           url: '/auth/signin',
           method: 'POST',
           data: JSON.stringify(sigin),
         })
         //hacer mipropio formato de datos
+      console.log('banana3');
         const userdata = response.data;
-        await AsyncStorage.setItem("user", JSON.stringify(userdata));
+        await AsyncStorage.setItem("role", userdata.roles.name);
         dispatch({ type: 'SIGNIN', token: userdata.token, role: userdata.roles.name });
         console.log("rol desde admin", userdata.roles.name);
       } catch (error) {
