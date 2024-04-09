@@ -12,6 +12,7 @@ import { update } from 'lodash';
 import AxiosClient from '../../../config/http-gateway/http-cleint';
 import { getColorsFromServer, getLogoFromServer } from '../../../config/colors/colorService';
 
+
 const Tab = createBottomTabNavigator();
 const NavigationEstudiante = () => {
   const [colors, setColors] = useState([]);
@@ -32,8 +33,6 @@ const NavigationEstudiante = () => {
 
     fetchColors();
   }, []);
-  console.log("colors", colors);
-  console.log("photoURL", photoURL);
 
   const saveColorsToStorage = async (colors) => {
     try {
@@ -96,12 +95,9 @@ const datatoSend = {data:dataUser}
 console.log("Data to send:", datatoSend);
 
 useEffect(() => {
-  console.log("Id user:", idUser);
 }, [idUser]);
-console.log("aver dato", datatoSend);
 
 useEffect(() => {
-  console.log("Data user:", dataUser);
 }, [dataUser]);
   
   const handleIconPress = async () => {

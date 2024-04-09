@@ -1,5 +1,5 @@
-import React, { useEffect, useState,useReducer } from 'react';
-import { StyleSheet} from 'react-native';
+import React, { useEffect, useState, useReducer } from 'react';
+import { StyleSheet } from 'react-native';
 import NavigationAdmin from './src/modules/navigation/navigationAdmin/NavigationAdmin';
 import NavigationEstudiante from './src/modules/navigation/navigationEstudiante/NavigationEstudiante';
 import Login from './src/modules/auth/adapters/screens/Login';
@@ -20,25 +20,24 @@ const init = async () => {
   return initialState;
 };
 
+
 export default function App() {
-  
+
   const [state, dispatch] = useReducer(AuthManager, initialState, init);
 
   useEffect(() => {
     init().then((initialState) => dispatch({ type: 'INIT', ...initialState }));
   }, []);
+  console.log("initialState",initialState);
 
 
-  /*const [student, setStudent] = useState(false);
+  const [student, setStudent] = useState(false);
   const [admin, setAdmin] = useState(false);
   const [login, setLogin] = useState(true);
   const [reload, setReload] = useState(false);
 
-
-
   const getRole = async () => {
-    //const role =  await AsyncStorage.removeItem('role');
-    const role =  await AsyncStorage.getItem('role');
+    const role = await AsyncStorage.getItem('role');
     console.log("Recibiendo rol desde app", role);
     if (role === 'ADMIN_ROLE') {
       setAdmin(true);
@@ -48,33 +47,39 @@ export default function App() {
       setStudent(true);
       setAdmin(false);
       setLogin(false);
-    } else {  
+    } else {
       setAdmin(false);
       setStudent(false);
       setLogin(true);
     }
   }
 
-
   useEffect(() => {
     getRole();
     setReload(false);
-  }, [reload]);
-*/
+  }, [state]);
 
-return (
-  <AuthContext.Provider value={{ state, dispatch }}>
-    {state.signed ? (
-  state.role === 'ADMIN_ROLE' ? (
-    <NavigationAdmin />
-  ) : state.role === 'ESTUDIANTE_ROLE' ? (
-    <NavigationEstudiante />
-  ) : <Login /> // Agrega un valor de retorno para el caso en que el rol no sea ni 'ADMIN_ROLE' ni 'ESTUDIANTE_ROLE'
-) : (
-  <Login />
-)}
-  </AuthContext.Provider>
-);
+/*
+{state._j ? (
+        state._j.role === 'ADMIN_ROLE' ? (
+          <NavigationAdmin />
+        ) : state._j.role === 'ESTUDIANTE_ROLE' ? (
+*/
+  
+  console.log("Role", state);
+  return (
+    <AuthContext.Provider value={{ state, dispatch }}>
+      {state.signed || state._j ? (
+        state.role || state._j.role === 'ADMIN_ROLE' ? (
+          <NavigationAdmin />
+        ) : state.role === 'ESTUDIANTE_ROLE' ? (
+          <NavigationEstudiante />
+        ) : <Login /> // Agrega un valor de retorno para el caso en que el rol no sea ni 'ADMIN_ROLE' ni 'ESTUDIANTE_ROLE'
+      ) : (
+        <Login />
+      )}
+    </AuthContext.Provider>
+  );
 
 }
 

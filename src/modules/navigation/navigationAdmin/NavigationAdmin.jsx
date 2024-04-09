@@ -36,8 +36,6 @@ export default function NavigationAdmin() {
 
     fetchColors();
   }, []);
-  console.log("colors", colors);
-  console.log("photoURL", photoURL);
 
   const saveColorsToStorage = async (colors) => {
     try {

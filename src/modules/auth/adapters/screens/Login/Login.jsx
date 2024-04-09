@@ -8,6 +8,7 @@ import { LoginStyles } from './constants/Index';
 import AxiosClient from '../../../../../config/http-gateway/http-cleint';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthContext from '../../../../../config/context/auth-context';
+import { getColorsFromServer, getLogoFromServer } from '../../../../../config/colors/colorService';
 
 
 
@@ -28,53 +29,54 @@ export default function Login() {
 
   useEffect(() => {
     const fetchColors = async () => {
-      const colors = await getColorsFromStorage();
-      const logo = await getLogoFromStorage();
-      if (colors) {
-        // Hacer algo con los colores obtenidos, como actualizar el estado
-        setPhotoURL(logo);
-        setColors(colors);
+      const colorsData = await getColorsFromServer();
+      const logoData = await getLogoFromServer();
+      if (colorsData) {
+        setColors(colorsData);
+        saveColorsToStorage(colorsData);
+      }
+      if (logoData) {
+        setPhotoURL(logoData);
+        saveLogoToStorage(logoData);
       }
     };
 
     fetchColors();
   }, []);
-  const getLogoFromStorage = async () => {
+
+  const saveColorsToStorage = async (colors) => {
     try {
-      const logoData = await AsyncStorage.getItem('logo');
-      if (logoData !== null) {
-        return JSON.parse(logoData);
-      }
+      await AsyncStorage.setItem('colors', JSON.stringify(colors));
+      console.log('Colores guardados en AsyncStorage.');
     } catch (error) {
-      console.error('Error al obtener logo de AsyncStorage:', error);
+      console.error('Error al guardar colores en AsyncStorage:', error);
+    }
+  };
+  const saveLogoToStorage = async (logo) => {
+    try {
+      await AsyncStorage.setItem('logo', JSON.stringify(logo));
+      console.log('Logo guardado en AsyncStorage.');
+    } catch (error) {
+      console.error('Error al guardar logo en AsyncStorage:', error);
     }
   }
 
-  const getColorsFromStorage = async () => {
-    try {
-      const colorsData = await AsyncStorage.getItem('colors');
-      if (colorsData !== null) {
-        return JSON.parse(colorsData);
-      }
-    } catch (error) {
-      console.error('Error al obtener colores de AsyncStorage:', error);
-    }
-  };
-
   const login = async () => {
     if (!isEmpty(email) && !isEmpty(password)) {
-      //proceso de inicio de sesión
       setShowMessage('');
       setVisible(true);
+      console.log('banana1');
       try {
+        console.log('banana2');
         const response = await AxiosClient({
           url: '/auth/signin',
           method: 'POST',
           data: JSON.stringify(sigin),
         })
         //hacer mipropio formato de datos
+      console.log('banana3');
         const userdata = response.data;
-        await AsyncStorage.setItem("user", JSON.stringify(userdata));
+        await AsyncStorage.setItem("role", userdata.roles.name);
         dispatch({ type: 'SIGNIN', token: userdata.token, role: userdata.roles.name });
         console.log("rol desde admin", userdata.roles.name);
       } catch (error) {

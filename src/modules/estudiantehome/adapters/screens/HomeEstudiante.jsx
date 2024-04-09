@@ -92,7 +92,7 @@ export default function HomeEstudiante(props) {
         onChangeText={(text) => setSearch(text)}
         value={search}
       />
-      {filteredExamenes
+      {filteredExamenes.length > 0 ? filteredExamenes
         .map((itemmap, index) => (
           <TouchableOpacity key={index} onPress={()=> navigation.navigate("ExamenHistory",itemmap)}>
             <View style={[styles.row, { backgroundColor: colors.length > 0 ? colors[0].color1 : '#119DA4' }]}>
@@ -103,7 +103,10 @@ export default function HomeEstudiante(props) {
               </View>
             </View>
           </TouchableOpacity>
-        ))}
+        )):(
+          <Text style={styles.title}>No hay examenes realizados</Text>
+        )
+        }
       <View style={styles.buttonSearch}>
         <Icon name="add" size={64} style={styles.searchIcon} color="#FFFF" onPress={()=>setVisibleCode(true)} />
         {console.log("home",visibleCode)}
