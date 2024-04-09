@@ -77,7 +77,7 @@ export default function Login() {
       console.log('banana3');
         const userdata = response.data;
         await AsyncStorage.setItem("role", userdata.roles.name);
-        await AsyncStorage.setItem("user", userdata);
+        await AsyncStorage.setItem("user",JSON.stringify(userdata));
         dispatch({ type: 'SIGNIN', token: userdata.token, role: userdata.roles.name });
         console.log("rol desde admin", userdata.roles.name);
       } catch (error) {
